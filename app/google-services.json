@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "15936754105",
+    "project_id": "bg-collectible-guide",
+    "storage_bucket": "bg-collectible-guide.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15936754105:android:c1c032d4cc5d53261b6668",
+        "android_client_info": {
+          "package_name": "com.example.bgcollectibleguide"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_WR0wiB4_XqdHHIb23LELmyi9DVcApUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

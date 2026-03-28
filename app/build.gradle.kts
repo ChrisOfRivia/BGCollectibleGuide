@@ -1,15 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    // id("com.android.application") // This is covered by the alias, and can be removed if the alias includes it.
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.example.bgcollectibleguide"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36 // Corrected syntax for compileSdk
 
     defaultConfig {
         applicationId = "com.example.bgcollectibleguide"
@@ -55,4 +53,17 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+
+// Import the BoM (this manages versions for all firebase libs)
+    implementation(platform("com.google.firebase:firebase-bom:34.10.0"))
+
+    // Add the dependencies for Firebase products
+    // REMOVE the "-ktx" suffix and the extra colon
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("com.google.maps.android:maps-compose:2.11.4")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 }
