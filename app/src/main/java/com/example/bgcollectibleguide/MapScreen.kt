@@ -52,17 +52,12 @@ fun CurrentLocationMap() {
     val ownedIds by repository.getOwnedLandmarkIds().collectAsState(initial = emptySet())
 
     val cameraPositionState = rememberCameraPositionState {
-        // Start view at TU Sofia
         position = CameraPosition.fromLatLngZoom(LatLng(42.6570, 23.3551), 15f)
     }
-
-    // Tracks if we have already snapped the camera to the user's real location
-    var hasSnappedToUser by remember { mutableStateOf(false) }
 
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
     var landmarkToCollect by remember { mutableStateOf<Landmark?>(null) }
 
-    // Real-time location tracking
     DisposableEffect(Unit) {
         val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
             .setMinUpdateIntervalMillis(1000)
@@ -71,16 +66,6 @@ fun CurrentLocationMap() {
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult.lastLocation?.let { loc ->
-                    val userLatLng = LatLng(loc.latitude, loc.longitude)
-                    
-                    // If the user's location changes (e.g. via adb command), 
-                    // snap the camera to them once.
-                    if (!hasSnappedToUser) {
-                        cameraPositionState.position = CameraPosition.fromLatLngZoom(userLatLng, 17f)
-                        hasSnappedToUser = true
-                    }
-
-                    // Check proximity to any landmark
                     val nearby = landmarks.find { landmark ->
                         !ownedIds.contains(landmark.id) && isWithinRange(loc.latitude, loc.longitude, landmark)
                     }
@@ -120,7 +105,6 @@ fun CurrentLocationMap() {
             }
         }
 
-        // Collection UI Popup
         landmarkToCollect?.let { landmark ->
             Card(
                 modifier = Modifier
@@ -150,10 +134,6 @@ fun CurrentLocationMap() {
 
 private fun isWithinRange(lat: Double, lng: Double, landmark: Landmark): Boolean {
     val results = FloatArray(1)
-    Location.distanceBetween(
-        lat, lng,
-        landmark.latitude, landmark.longitude,
-        results
-    )
+    Location.distanceBetween(lat, lng, landmark.latitude, landmark.longitude, results)
     return results[0] <= landmark.radius
 }
