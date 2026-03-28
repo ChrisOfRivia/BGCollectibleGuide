@@ -121,6 +121,4 @@ fun BottomNavigationBar(navController: NavHostController, currentRoute: String?)
 }
 
 // Mock Screens (Implement these in separate files later!)
-@Composable fun MapScreen() { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Map Screen") } }
-@Composable fun ProfileScreen() { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Profile Screen") } }
 @Composable fun CollectionScreen() { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Collection Screen") } }
