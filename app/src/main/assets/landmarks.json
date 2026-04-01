@@ -1,0 +1,56 @@
+[
+  {
+    "id": "landmark_1",
+    "name": "Alexander Nevsky Cathedral",
+    "description": "The iconic Orthodox cathedral in the heart of Sofia.",
+    "latitude": 42.695808,
+    "longitude": 23.332794,
+    "radius": 100.0,
+    "rarity": "Legendary"
+  },
+  {
+    "id": "landmark_2",
+    "name": "National Palace of Culture",
+    "description": "NDK - the cultural hub of the capital.",
+    "latitude": 42.685271,
+    "longitude": 23.318991,
+    "radius": 150.0,
+    "rarity": "Epic"
+  },
+  {
+    "id": "landmark_tu_sofia",
+    "name": "Technical University of Sofia",
+    "description": "Building 1 (Rectorate) of the largest technical university.",
+    "latitude": 42.657065,
+    "longitude": 23.355152,
+    "radius": 120.0,
+    "rarity": "Legendary"
+  },
+  {
+    "id": "landmark_uctm",
+    "name": "UCTM Sofia",
+    "description": "Main building of the University of Chemical Technology and Metallurgy.",
+    "latitude": 42.65541555116138,
+    "longitude": 23.358456498321306,
+    "radius": 120.0,
+    "rarity": "Rare"
+  },
+  {
+    "id": "landmark_studentski_park",
+    "name": "Studentski Park",
+    "description": "The central park of Studentski Grad.",
+    "latitude": 42.65419252135938,
+    "longitude": 23.351445204068668,
+    "radius": 250.0,
+    "rarity": "Uncommon"
+  },
+  {
+    "id": "landmark_unwe",
+    "name": "UNWE",
+    "description": "Main entrance of the University of National and World Economy.",
+    "latitude": 42.65135973410708,
+    "longitude": 23.3490017116621,
+    "radius": 100.0,
+    "rarity": "Rare"
+  }
+]

@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home // Added for Map
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.*
@@ -17,7 +17,9 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
+import com.example.bgcollectibleguide.data.LandmarkRepository
 import com.example.bgcollectibleguide.ui.theme.BGCollectibleGuideTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,14 +27,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val auth = FirebaseAuth.getInstance()
+        val repository = LandmarkRepository()
 
         setContent {
             var isLoggedIn by remember { mutableStateOf(auth.currentUser != null) }
+            val scope = rememberCoroutineScope()
+
+            // Auto-seed database once if logged in
+            LaunchedEffect(isLoggedIn) {
+                if (isLoggedIn) {
+                    repository.seedDatabase(this@MainActivity)
+                }
+            }
 
             BGCollectibleGuideTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     if (isLoggedIn) {
-                        // Предаваме ламбда функция, която изключва потребителя
                         MainScreen(onLogout = {
                             auth.signOut()
                             isLoggedIn = false
@@ -46,19 +56,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// --- COMPOSE SCREENS ---
-
 @Composable
 fun MainScreen(onLogout: () -> Unit) {
     val navController = rememberNavController()
-
-    // 1. Вземаме информация за текущия екран
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         bottomBar = {
-            // 2. Подаваме и двата аргумента тук
             BottomNavigationBar(
                 navController = navController,
                 currentRoute = currentRoute
@@ -77,9 +82,8 @@ fun MainScreen(onLogout: () -> Unit) {
     }
 }
 
-// ВАЖНО: Трябва да промениш и самата функция ProfileScreen!
 @Composable
-fun ProfileScreen(onLogout: () -> Unit) { // Добави параметъра тук
+fun ProfileScreen(onLogout: () -> Unit) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -115,10 +119,9 @@ fun BottomNavigationBar(navController: NavHostController, currentRoute: String?)
             selected = currentRoute == "map",
             onClick = { navController.navigate("map") { launchSingleTop = true } },
             label = { Text("Map") },
-            icon = { Icon(Icons.Default.Home, contentDescription = "Map") } // Fixed Icon
+            icon = { Icon(Icons.Default.Home, contentDescription = "Map") }
         )
     }
 }
 
-// Mock Screens (Implement these in separate files later!)
 @Composable fun CollectionScreen() { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Collection Screen") } }

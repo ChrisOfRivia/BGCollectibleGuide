@@ -17,6 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BGCollectibleGuide">
 
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <!-- Add your Google Maps API Key here -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"

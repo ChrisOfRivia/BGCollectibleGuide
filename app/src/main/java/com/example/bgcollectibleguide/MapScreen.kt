@@ -48,7 +48,7 @@ fun CurrentLocationMap() {
     val scope = rememberCoroutineScope()
     val repository = remember { LandmarkRepository() }
     
-    val landmarks by repository.getLandmarks().collectAsState(initial = emptyList())
+    val landmarks by repository.getLandmarks(context).collectAsState(initial = emptyList())
     val ownedIds by repository.getOwnedLandmarkIds().collectAsState(initial = emptySet())
 
     val cameraPositionState = rememberCameraPositionState {
