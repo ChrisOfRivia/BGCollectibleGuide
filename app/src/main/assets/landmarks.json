@@ -7,7 +7,7 @@
     "longitude": 23.332794,
     "radius": 100.0,
     "rarity": "Legendary",
-    "imageUrl": "https://images.unsplash.com/photo-1596464716127-f2a82984de30?q=80&w=500"
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweopdQy23CiGnj-6jOixmRkcCtSkTxhuDvzxd35C84ePCqoWIVNKXqFJukeJZzbOAYssodS_Kld6txp20ehZyenw14o0gELSimbNSL8IeRYEWimubuVXIFY9_Gf5MfpFBRzFrcFo=w408-h306-k-no"
   },
   {
     "id": "landmark_2",
@@ -17,7 +17,7 @@
     "longitude": 23.318991,
     "radius": 150.0,
     "rarity": "Epic",
-    "imageUrl": "https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?q=80&w=500"
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepu_ymtDqGsHCkxEDAV2fIGMLiARTTuyutikOsAftknKAKB52mYZ_zI6LGzANdLK2r2OnCEXaahoX_YyF7O1-Bdmcm8SLZJGWXiVTfTw7AaMp6kRaaDlMuodeFV6tqQpNxo1IJy=w408-h305-k-no"
   },
   {
     "id": "landmark_tu_sofia",
@@ -27,7 +27,7 @@
     "longitude": 23.355152,
     "radius": 120.0,
     "rarity": "Legendary",
-    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/TU_Sofia_1.jpg/500px-TU_Sofia_1.jpg"
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwerj-ISKs0WJB2-gkxyYuj1dAA73cXHdiieymvvue0S2YU1nLorQrx4GrfgvRMYS9mi0qilAy38zWZx0X5MnfJ2Z48LgtHx0AuQge_mh4HCngX_wQaCKwf1MxT3lDrLIYGrZp4wWjg=w408-h263-k-no"
   },
   {
     "id": "landmark_uctm",
@@ -37,7 +37,7 @@
     "longitude": 23.358456498321306,
     "radius": 120.0,
     "rarity": "Rare",
-    "imageUrl": "https://uctm.edu/images/front/01.jpg"
+    "imageUrl": "https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=ge6OUOA1eUXZHdEqzSJ8Pw&cb_client=search.gws-prod.gps&w=408&h=240&yaw=247.22484&pitch=0&thumbfov=100"
   },
   {
     "id": "landmark_studentski_park",
@@ -47,7 +47,7 @@
     "longitude": 23.351445204068668,
     "radius": 250.0,
     "rarity": "Uncommon",
-    "imageUrl": "https://images.unsplash.com/photo-1590012314607-cda9d9b699ae?q=80&w=500"
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepBDvnkJa8mOVqHmfO66-DK8lw_Yivsh67n-oFZOl8Y-BpxHuak4oUDSuYnlTOGxw_qEoHqhWz4QNR60icoAwzRIqEkT1gxFnvIBqxl9LmPKApwboYLati1CiXylXE5T2jaBzVs=w408-h306-k-no"
   },
   {
     "id": "landmark_unwe",
@@ -57,6 +57,6 @@
     "longitude": 23.3490017116621,
     "radius": 100.0,
     "rarity": "Rare",
-    "imageUrl": "https://www.unwe.bg/uploads/news/unwe-building-1.jpg"
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepQVEcm625TmgDGCwfdMYpn8h6Ioj4Vcld0fk6hfxsVQeumGPV1uoqmB0knTKe8pTU-xfKxNy3A0Y0-MeVbC9dGsnEyUVJ8oh3HPgR0RNI2Jp-S21RplRxv6SEewe0HqdoKlkVNyA=w408-h306-k-no"
   }
 ]
