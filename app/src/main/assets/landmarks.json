@@ -58,5 +58,28 @@
     "radius": 100.0,
     "rarity": "Rare",
     "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepQVEcm625TmgDGCwfdMYpn8h6Ioj4Vcld0fk6hfxsVQeumGPV1uoqmB0knTKe8pTU-xfKxNy3A0Y0-MeVbC9dGsnEyUVJ8oh3HPgR0RNI2Jp-S21RplRxv6SEewe0HqdoKlkVNyA=w408-h306-k-no"
+  },
+  {
+    "id": "landmark_uof",
+    "name": "University of Forestry",
+    "description": "A leading educational center for forestry, ecology, and veterinary medicine. The heart of green sciences in Sofia.",
+    "latitude": 42.65380182500164,
+    "longitude": 23.358856194646886,
+    "radius": 100.0,
+    "rarity": "Rare",
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepFcK7W9jtG00y5kPar20F9T4f1FocWR2z_I1uj_WnObJQcy8rMa_4gz5s63kWAdkE_Uo4WCJEwWvAG8ypGwpXI8vJZojswfmGYW94K4yUcdxNhgoKJIGFcP-2zNwm5j10po8-fow=w408-h306-k-no"
+  },
+  {
+    "id": "landmark_su",
+    "name": "Sofia University",
+    "description": "The oldest and most prestigious institution of higher education in Bulgaria. An architectural and cultural icon.",
+    "latitude": 42.69356702109262,
+    "longitude": 23.334986198961598,
+    "radius": 100,
+    "rarity": "Legendary",
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepFMIrc9yJCC86Rqs2VvTmfZS1wDd3wvvrkWVWjai15p7NywSLmOYvS_RZkXO5WzbASdlzSUvc1QYmUhn9zmjr98vrFPKGi3THqk3JjchJPdCXJmCTav2evJs3qGa55peHeFrIR6Q=w426-h240-k-no"
+  },
+  {
+
   }
 ]
