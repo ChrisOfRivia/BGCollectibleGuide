@@ -35,9 +35,6 @@ class LandmarkRepository {
                     // If database is empty, trigger an automatic seed
                     if (landmarks.isEmpty()) {
                         Log.d("LandmarkRepo", "Database is empty, starting auto-seed...")
-                        // We can't suspend here, so we'll just log. 
-                        // The user should see the 'Import' button was better for control, 
-                        // but we'll try to make it work in the background.
                     }
                     trySend(landmarks)
                 }
@@ -50,6 +47,14 @@ class LandmarkRepository {
         firestore.collection("users").document(uid)
             .collection("collection").document(landmarkId)
             .set(mapOf("owned" to true, "collectedAt" to System.currentTimeMillis()))
+            .await()
+    }
+
+    suspend fun removeLandmark(landmarkId: String) {
+        val uid = userId ?: return
+        firestore.collection("users").document(uid)
+            .collection("collection").document(landmarkId)
+            .delete()
             .await()
     }
     

@@ -10,16 +10,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.bgcollectibleguide.data.LandmarkRepository
 import com.example.bgcollectibleguide.models.Landmark
 import com.example.bgcollectibleguide.ui.LandmarkCard
+import kotlinx.coroutines.launch
 
 @Composable
 fun CollectionScreen() {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val repository = remember { LandmarkRepository() }
     
     val allLandmarks by repository.getLandmarks(context).collectAsState(initial = emptyList())
@@ -36,23 +39,20 @@ fun CollectionScreen() {
             }
         } else {
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2), // Changed to 2 cards per row for better visibility
+                columns = GridCells.Fixed(2),
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(collectedLandmarks) { landmark ->
-                    // Card container in the grid
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .aspectRatio(0.7f) // Keep card ratio (260/380 approx 0.68)
+                            .aspectRatio(0.7f)
                             .clickable { selectedLandmark = landmark },
                         contentAlignment = Alignment.Center
                     ) {
-                        // We scale the card down to fit the grid cell
-                        // With 2 columns, 0.55f to 0.6f fits much better
                         LandmarkCard(
                             landmark = landmark,
                             modifier = Modifier.scale(0.55f)
@@ -62,17 +62,31 @@ fun CollectionScreen() {
             }
         }
 
-        // Full-screen zoom view
+        // Full-screen zoom view with Remove option
         selectedLandmark?.let { landmark ->
             Dialog(onDismissRequest = { selectedLandmark = null }) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     LandmarkCard(
                         landmark = landmark,
-                        modifier = Modifier.clickable { selectedLandmark = null } // Tap again to close
+                        modifier = Modifier.clickable { selectedLandmark = null }
                     )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Button(
+                        onClick = {
+                            scope.launch {
+                                repository.removeLandmark(landmark.id)
+                                selectedLandmark = null
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                    ) {
+                        Text("Remove from Collection", color = Color.White)
+                    }
                 }
             }
         }
