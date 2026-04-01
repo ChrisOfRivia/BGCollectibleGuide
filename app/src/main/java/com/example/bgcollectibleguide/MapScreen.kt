@@ -12,8 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.example.bgcollectibleguide.data.LandmarkRepository
 import com.example.bgcollectibleguide.models.Landmark
+import com.example.bgcollectibleguide.ui.LandmarkCard
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -57,6 +59,7 @@ fun CurrentLocationMap() {
 
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
     var landmarkToCollect by remember { mutableStateOf<Landmark?>(null) }
+    var showCollectedCard by remember { mutableStateOf<Landmark?>(null) }
 
     DisposableEffect(Unit) {
         val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
@@ -100,33 +103,42 @@ fun CurrentLocationMap() {
                     state = rememberMarkerState(position = LatLng(landmark.latitude, landmark.longitude)),
                     title = landmark.name,
                     snippet = if (isOwned) "Collected!" else landmark.rarity,
-                    alpha = if (isOwned) 0.6f else 1.0f
+                    alpha = if (isOwned) 0.6f else 1.0f,
+                    onInfoWindowClick = {
+                        if (isOwned) {
+                            showCollectedCard = landmark
+                        }
+                    }
                 )
             }
         }
 
+        // Discovery Popup with "Yu-Gi-Oh" Card style
         landmarkToCollect?.let { landmark ->
-            Card(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 80.dp, start = 16.dp, end = 16.dp)
-                    .fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-            ) {
-                Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("You've discovered ${landmark.name}!", style = MaterialTheme.typography.headlineSmall)
-                    Text("Rarity: ${landmark.rarity}", color = Color.Gray)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = {
-                        scope.launch {
-                            repository.collectLandmark(landmark.id)
-                            landmarkToCollect = null
-                            Toast.makeText(context, "Added to collection!", Toast.LENGTH_SHORT).show()
-                        }
-                    }) {
-                        Text("Collect Landmark")
+            Dialog(onDismissRequest = { landmarkToCollect = null }) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    LandmarkCard(landmark = landmark)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = {
+                            scope.launch {
+                                repository.collectLandmark(landmark.id)
+                                landmarkToCollect = null
+                                Toast.makeText(context, "${landmark.name} collected!", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                    ) {
+                        Text("Collect Landmark", color = Color.White)
                     }
                 }
+            }
+        }
+
+        // View already collected card
+        showCollectedCard?.let { landmark ->
+            Dialog(onDismissRequest = { showCollectedCard = null }) {
+                LandmarkCard(landmark = landmark)
             }
         }
     }

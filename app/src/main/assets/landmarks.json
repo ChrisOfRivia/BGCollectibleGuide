@@ -2,55 +2,61 @@
   {
     "id": "landmark_1",
     "name": "Alexander Nevsky Cathedral",
-    "description": "The iconic Orthodox cathedral in the heart of Sofia.",
+    "description": "The iconic Orthodox cathedral in the heart of Sofia. A symbol of Bulgaria's independence.",
     "latitude": 42.695808,
     "longitude": 23.332794,
     "radius": 100.0,
-    "rarity": "Legendary"
+    "rarity": "Legendary",
+    "imageUrl": "https://images.unsplash.com/photo-1596464716127-f2a82984de30?q=80&w=500"
   },
   {
     "id": "landmark_2",
     "name": "National Palace of Culture",
-    "description": "NDK - the cultural hub of the capital.",
+    "description": "NDK - the largest multifunctional cultural hub in Southeast Europe.",
     "latitude": 42.685271,
     "longitude": 23.318991,
     "radius": 150.0,
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?q=80&w=500"
   },
   {
     "id": "landmark_tu_sofia",
     "name": "Technical University of Sofia",
-    "description": "Building 1 (Rectorate) of the largest technical university.",
+    "description": "Building 1 (Rectorate) - where the future engineers of Bulgaria are forged.",
     "latitude": 42.657065,
     "longitude": 23.355152,
     "radius": 120.0,
-    "rarity": "Legendary"
+    "rarity": "Legendary",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/TU_Sofia_1.jpg/500px-TU_Sofia_1.jpg"
   },
   {
     "id": "landmark_uctm",
     "name": "UCTM Sofia",
-    "description": "Main building of the University of Chemical Technology and Metallurgy.",
+    "description": "University of Chemical Technology and Metallurgy. A stronghold of science.",
     "latitude": 42.65541555116138,
     "longitude": 23.358456498321306,
     "radius": 120.0,
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "https://uctm.edu/images/front/01.jpg"
   },
   {
     "id": "landmark_studentski_park",
     "name": "Studentski Park",
-    "description": "The central park of Studentski Grad.",
+    "description": "The green heart of Studentski Grad. A place for rest and social gatherings.",
     "latitude": 42.65419252135938,
     "longitude": 23.351445204068668,
     "radius": 250.0,
-    "rarity": "Uncommon"
+    "rarity": "Uncommon",
+    "imageUrl": "https://images.unsplash.com/photo-1590012314607-cda9d9b699ae?q=80&w=500"
   },
   {
     "id": "landmark_unwe",
     "name": "UNWE",
-    "description": "Main entrance of the University of National and World Economy.",
+    "description": "The prestigious University of National and World Economy. Center of business and law.",
     "latitude": 42.65135973410708,
     "longitude": 23.3490017116621,
     "radius": 100.0,
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "https://www.unwe.bg/uploads/news/unwe-building-1.jpg"
   }
 ]

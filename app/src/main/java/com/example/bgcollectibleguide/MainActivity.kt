@@ -33,7 +33,6 @@ class MainActivity : ComponentActivity() {
             var isLoggedIn by remember { mutableStateOf(auth.currentUser != null) }
             val scope = rememberCoroutineScope()
 
-            // Auto-seed database once if logged in
             LaunchedEffect(isLoggedIn) {
                 if (isLoggedIn) {
                     repository.seedDatabase(this@MainActivity)
@@ -123,5 +122,3 @@ fun BottomNavigationBar(navController: NavHostController, currentRoute: String?)
         )
     }
 }
-
-@Composable fun CollectionScreen() { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Collection Screen") } }
