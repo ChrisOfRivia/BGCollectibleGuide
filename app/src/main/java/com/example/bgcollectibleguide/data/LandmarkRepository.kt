@@ -72,6 +72,25 @@ class LandmarkRepository {
         awaitClose { subscription.remove() }
     }
 
+    /**
+     * Get owned landmark IDs mapped to their collection timestamp.
+     */
+    fun getOwnedLandmarkData(): Flow<Map<String, Long>> = callbackFlow {
+        val uid = userId ?: run {
+            trySend(emptyMap())
+            return@callbackFlow
+        }
+        val subscription = firestore.collection("users").document(uid)
+            .collection("collection")
+            .addSnapshotListener { snapshot, _ ->
+                val data = snapshot?.documents?.associate { 
+                    it.id to (it.getLong("collectedAt") ?: 0L)
+                } ?: emptyMap()
+                trySend(data)
+            }
+        awaitClose { subscription.remove() }
+    }
+
     suspend fun seedDatabase(context: Context) {
         try {
             val inputStream = context.assets.open("landmarks.json")
