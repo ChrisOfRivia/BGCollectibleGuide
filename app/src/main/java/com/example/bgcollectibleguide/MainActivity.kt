@@ -115,10 +115,9 @@ fun ProfileScreen(onLogout: () -> Unit) {
     val allLandmarks by repository.getLandmarks(context).collectAsState(initial = emptyList())
     val ownedIds by repository.getOwnedLandmarkIds().collectAsState(initial = emptySet())
 
-    // Calculate collection progress
+    // Calculate collection statistics
     val totalLandmarks = allLandmarks.size
     val collectedCount = ownedIds.size
-    val progress = if (totalLandmarks > 0) (collectedCount.toFloat() / totalLandmarks) else 0f
 
     Column(
         modifier = Modifier
@@ -208,27 +207,6 @@ fun ProfileScreen(onLogout: () -> Unit) {
                     val legendaryCount = allLandmarks.filter { ownedIds.contains(it.id) }.count { it.rarity == "Legendary" }
                     StatItem(label = "Legendary", value = legendaryCount.toString())
                 }
-                
-                Spacer(modifier = Modifier.height(24.dp))
-                
-                // Visual progress bar
-                LinearProgressIndicator(
-                    progress = { progress },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(12.dp)
-                        .clip(CircleShape),
-                    color = MaterialTheme.colorScheme.primary,
-                    trackColor = MaterialTheme.colorScheme.primaryContainer
-                )
-                
-                Spacer(modifier = Modifier.height(8.dp))
-                
-                Text(
-                    text = "${(progress * 100).toInt()}% of Landmarks Found",
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.align(Alignment.End)
-                )
             }
         }
 
