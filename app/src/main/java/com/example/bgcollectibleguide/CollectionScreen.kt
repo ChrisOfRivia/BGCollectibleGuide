@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Screen displaying the user's personal collection of landmarks.
- * Features filtering by rarity and sorting by date.
+ * Features filtering.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,36 +32,29 @@ fun CollectionScreen() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val repository = remember { LandmarkRepository() }
-    
-    // Fetch all available landmarks and the user's ownership data from Firestore
+
     val allLandmarks by repository.getLandmarks(context).collectAsState(initial = emptyList())
     val ownedData by repository.getOwnedLandmarkData().collectAsState(initial = emptyMap())
 
-    // UI State for filtering and sorting controls
     var selectedRarity by remember { mutableStateOf("All") }
     var sortByRecent by remember { mutableStateOf(true) }
     var showFilters by remember { mutableStateOf(false) }
     
     val rarities = listOf("All", "Legendary", "Epic", "Rare", "Uncommon", "Common")
 
-    // Filtered list calculation based on user selection
-    // Uses remember to avoid re-calculating on every recomposition unless dependencies change
     val filteredLandmarks = remember(allLandmarks, ownedData, selectedRarity, sortByRecent) {
         allLandmarks
-            .filter { ownedData.containsKey(it.id) } // Only show what the user owns
-            .filter { selectedRarity == "All" || it.rarity == selectedRarity } // Filter by rarity
+            .filter { ownedData.containsKey(it.id) }
+            .filter { selectedRarity == "All" || it.rarity == selectedRarity }
             .let { list ->
                 if (sortByRecent) {
-                    // Sort by the timestamp when the landmark was collected
                     list.sortedByDescending { ownedData[it.id] ?: 0L }
                 } else {
-                    // Default alphabetical sort
                     list.sortedBy { it.name }
                 }
             }
     }
-    
-    // State to track which landmark is currently being viewed in full-screen
+
     var selectedLandmark by remember { mutableStateOf<Landmark?>(null) }
 
     Scaffold(
@@ -69,7 +62,6 @@ fun CollectionScreen() {
             TopAppBar(
                 title = { Text("My Collection (${filteredLandmarks.size})") },
                 actions = {
-                    // Button to toggle the filter visibility
                     IconButton(onClick = { showFilters = !showFilters }) {
                         Icon(Icons.Default.FilterList, contentDescription = "Filter")
                     }
@@ -78,7 +70,6 @@ fun CollectionScreen() {
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            // Animated/Expandable Filter Header
             if (showFilters) {
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -86,8 +77,7 @@ fun CollectionScreen() {
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text("Filter by Rarity", style = MaterialTheme.typography.labelLarge)
-                        
-                        // Horizontal scrollable chips for rarity selection
+
                         Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
                             ScrollableTabRow(
                                 selectedTabIndex = rarities.indexOf(selectedRarity),
@@ -105,8 +95,7 @@ fun CollectionScreen() {
                                 }
                             }
                         }
-                        
-                        // Sort toggle
+
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth()
@@ -121,7 +110,6 @@ fun CollectionScreen() {
                 }
             }
 
-            // Empty State handling
             if (filteredLandmarks.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(
@@ -131,7 +119,6 @@ fun CollectionScreen() {
                     )
                 }
             } else {
-                // Main grid of collected landmarks
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier.fillMaxSize(),
@@ -144,10 +131,9 @@ fun CollectionScreen() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .aspectRatio(0.7f)
-                                .clickable { selectedLandmark = landmark }, // Open full view on tap
+                                .clickable { selectedLandmark = landmark },
                             contentAlignment = Alignment.Center
                         ) {
-                            // Display the collectible card scaled down for the grid
                             LandmarkCard(
                                 landmark = landmark,
                                 modifier = Modifier.scale(0.55f)
@@ -158,22 +144,20 @@ fun CollectionScreen() {
             }
         }
 
-        // Full-screen zoom view with management options
+        // Zoom
         selectedLandmark?.let { landmark ->
             Dialog(onDismissRequest = { selectedLandmark = null }) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    // Display full-size card
                     LandmarkCard(
                         landmark = landmark,
                         modifier = Modifier.clickable { selectedLandmark = null }
                     )
                     
                     Spacer(modifier = Modifier.height(16.dp))
-                    
-                    // Option to remove the landmark from the collection (for testing/reset)
+
                     Button(
                         onClick = {
                             scope.launch {

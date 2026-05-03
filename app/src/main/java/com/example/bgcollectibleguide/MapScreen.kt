@@ -26,23 +26,18 @@ import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
 
 /**
- * Main entry point for the Map tab.
- * Handles the logic for requesting location permissions before showing the map.
+ * Map tab.
  */
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MapScreen() {
-    // State object to track and request the Fine Location permission
     val locationPermissionState = rememberPermissionState(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
 
-    // Check if the permission is already granted by the user
     if (locationPermissionState.status.isGranted) {
-        // If granted, proceed to the actual map implementation
         CurrentLocationMap()
     } else {
-        // If not granted, show a centered button to trigger the system permission dialog
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Button(onClick = { locationPermissionState.launchPermissionRequest() }) {
                 Text("Allow Map Access")
@@ -50,76 +45,58 @@ fun MapScreen() {
         }
     }
 }
-
-/**
- * The core map component. 
- * Manages Google Maps, real-time location tracking, and landmark interaction logic.
- */
-@SuppressLint("MissingPermission") // Permission check is handled in the parent MapScreen
+@SuppressLint("MissingPermission")
 @Composable
 fun CurrentLocationMap() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val repository = remember { LandmarkRepository() }
-    
-    // Live collection of all landmarks from the database
+
     val landmarks by repository.getLandmarks(context).collectAsState(initial = emptyList())
-    // Set of IDs the user has already collected
     val ownedIds by repository.getOwnedLandmarkIds().collectAsState(initial = emptySet())
 
-    // Initial camera state focused on Sofia, Bulgaria
+    // Sofia
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(42.6570, 23.3551), 15f)
     }
 
-    // Client for interacting with Google Play Services location APIs
+    // Google Play APIs
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
-    
-    // UI States for handling popups
+
     var landmarkToCollect by remember { mutableStateOf<Landmark?>(null) }
     var showCollectedCard by remember { mutableStateOf<Landmark?>(null) }
 
-    // Start listening for location updates when this component enters the screen
     DisposableEffect(Unit) {
-        // Configure how often we want location updates (every 2 seconds, high accuracy)
         val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
             .setMinUpdateIntervalMillis(1000)
             .build()
 
-        // Callback triggered whenever the device's location changes
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult.lastLocation?.let { loc ->
-                    // Check if the user has walked into the radius of an uncollected landmark
                     val nearby = landmarks.find { landmark ->
                         !ownedIds.contains(landmark.id) && isWithinRange(loc.latitude, loc.longitude, landmark)
                     }
-                    // If a nearby uncollected landmark is found, trigger the discovery popup
                     landmarkToCollect = nearby
                 }
             }
         }
 
-        // Register the callback with the system
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, context.mainLooper)
 
-        // Cleanup: Stop location updates when the user leaves the map screen to save battery
         onDispose { fusedLocationClient.removeLocationUpdates(locationCallback) }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // The Google Map UI
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
-            properties = MapProperties(isMyLocationEnabled = true), // Shows the "Blue Dot"
-            uiSettings = MapUiSettings(myLocationButtonEnabled = true) // Shows the "Center on Me" button
+            properties = MapProperties(isMyLocationEnabled = true),
+            uiSettings = MapUiSettings(myLocationButtonEnabled = true)
         ) {
-            // Draw all landmarks on the map
             landmarks.forEach { landmark ->
                 val isOwned = ownedIds.contains(landmark.id)
-                
-                // Visual circle representing the collection area
+
                 Circle(
                     center = LatLng(landmark.latitude, landmark.longitude),
                     radius = landmark.radius,
@@ -128,14 +105,12 @@ fun CurrentLocationMap() {
                     strokeWidth = 2f
                 )
 
-                // Standard marker pin
                 Marker(
                     state = rememberMarkerState(position = LatLng(landmark.latitude, landmark.longitude)),
                     title = landmark.name,
                     snippet = if (isOwned) "Collected!" else landmark.rarity,
-                    alpha = if (isOwned) 0.6f else 1.0f, // Fade out owned landmarks slightly
+                    alpha = if (isOwned) 0.6f else 1.0f,
                     onInfoWindowClick = {
-                        // If the user taps the info bubble of an owned landmark, show its card
                         if (isOwned) {
                             showCollectedCard = landmark
                         }
@@ -144,7 +119,6 @@ fun CurrentLocationMap() {
             }
         }
 
-        // Discovery Popup: Triggered when walk near a new landmark
         landmarkToCollect?.let { landmark ->
             Dialog(onDismissRequest = { landmarkToCollect = null }) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -152,7 +126,6 @@ fun CurrentLocationMap() {
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = {
-                            // Update the database to mark this landmark as owned
                             scope.launch {
                                 repository.collectLandmark(landmark.id)
                                 landmarkToCollect = null
@@ -167,7 +140,6 @@ fun CurrentLocationMap() {
             }
         }
 
-        // Inspect Mode: Shows the full card for a landmark the user already owns
         showCollectedCard?.let { landmark ->
             Dialog(onDismissRequest = { showCollectedCard = null }) {
                 LandmarkCard(landmark = landmark)
@@ -175,14 +147,8 @@ fun CurrentLocationMap() {
         }
     }
 }
-
-/**
- * Helper function to calculate if a coordinate is within a landmark's radius.
- * Uses the Haversine formula via Android's Location.distanceBetween.
- */
 private fun isWithinRange(lat: Double, lng: Double, landmark: Landmark): Boolean {
     val results = FloatArray(1)
     Location.distanceBetween(lat, lng, landmark.latitude, landmark.longitude, results)
-    // results[0] contains the distance in meters
     return results[0] <= landmark.radius
 }

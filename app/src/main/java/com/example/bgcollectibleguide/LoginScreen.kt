@@ -15,24 +15,13 @@ import kotlinx.coroutines.tasks.await
 
 /**
  * Data holder and logic handler for the Login Screen.
- * Using a ViewModel ensures state is preserved during configuration changes (like rotating the phone).
  */
 class LoginViewModel : ViewModel() {
-    // Current input values from the user
     var email by mutableStateOf("")
     var password by mutableStateOf("")
-    
-    // UI state flags
     var isLoading by mutableStateOf(false)
     var errorMessage by mutableStateOf<String?>(null)
-    
-    // Firebase instance for authentication
     private val auth = FirebaseAuth.getInstance()
-
-    /**
-     * Attempt to log in with the provided credentials.
-     * returns true if successful, false otherwise.
-     */
     suspend fun signIn(): Boolean {
         isLoading = true
         errorMessage = null
@@ -46,11 +35,6 @@ class LoginViewModel : ViewModel() {
             isLoading = false
         }
     }
-
-    /**
-     * Create a new account in Firebase.
-     * returns true if successful, false otherwise.
-     */
     suspend fun signUp(): Boolean {
         isLoading = true
         errorMessage = null
@@ -65,16 +49,9 @@ class LoginViewModel : ViewModel() {
         }
     }
 }
-
-/**
- * The entry point for the Login/Registration UI.
- * Provides fields for email and password and buttons for Sign In/Up.
- */
 @Composable
 fun LoginScreen(onLoginSuccess: () -> Unit) {
-    // Link the UI to the ViewModel logic
     val viewModel: LoginViewModel = viewModel()
-    // Scope for launching coroutines from UI interactions
     val scope = rememberCoroutineScope()
 
     Column(
@@ -92,7 +69,6 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
         
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Email Input Field
         OutlinedTextField(
             value = viewModel.email,
             onValueChange = { viewModel.email = it },
@@ -103,7 +79,6 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Password Input Field with hidden text transformation
         OutlinedTextField(
             value = viewModel.password,
             onValueChange = { viewModel.password = it },
@@ -113,7 +88,6 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
             enabled = !viewModel.isLoading
         )
 
-        // Error message display area - shown only when an error occurs
         viewModel.errorMessage?.let {
             Text(
                 text = it,
@@ -125,10 +99,8 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         if (viewModel.isLoading) {
-            // Show a progress spinner while communicating with Firebase
             CircularProgressIndicator()
         } else {
-            // Main Action Button for Sign In
             Button(
                 onClick = {
                     scope.launch {
@@ -136,13 +108,11 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-                // Basic validation: ensure fields aren't empty before allowing click
                 enabled = viewModel.email.isNotBlank() && viewModel.password.isNotBlank()
             ) {
                 Text("Login")
             }
 
-            // Link to switch to registration/sign-up
             TextButton(
                 onClick = {
                     scope.launch {

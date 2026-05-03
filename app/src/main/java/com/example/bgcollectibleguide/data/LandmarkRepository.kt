@@ -18,9 +18,6 @@ class LandmarkRepository {
     private val auth = FirebaseAuth.getInstance()
     private val userId get() = auth.currentUser?.uid
 
-    /**
-     * Get landmarks and automatically seed if the collection is empty.
-     */
     fun getLandmarks(context: Context): Flow<List<Landmark>> = callbackFlow {
         val subscription = firestore.collection("landmarks")
             .addSnapshotListener { snapshot, error ->
@@ -31,17 +28,13 @@ class LandmarkRepository {
                 
                 if (snapshot != null) {
                     val landmarks = snapshot.toObjects(Landmark::class.java)
-                    
-                    // If database is empty, trigger an automatic seed
-                    if (landmarks.isEmpty()) {
-                        Log.d("LandmarkRepo", "Database is empty, starting auto-seed...")
-                    }
                     trySend(landmarks)
                 }
             }
         awaitClose { subscription.remove() }
     }
 
+    // Pusher
     suspend fun collectLandmark(landmarkId: String) {
         val uid = userId ?: return
         firestore.collection("users").document(uid)
@@ -50,6 +43,7 @@ class LandmarkRepository {
             .await()
     }
 
+    // Pusher
     suspend fun removeLandmark(landmarkId: String) {
         val uid = userId ?: return
         firestore.collection("users").document(uid)
@@ -57,7 +51,8 @@ class LandmarkRepository {
             .delete()
             .await()
     }
-    
+
+    // Watcher
     fun getOwnedLandmarkIds(): Flow<Set<String>> = callbackFlow {
         val uid = userId ?: run {
             trySend(emptySet())
@@ -72,9 +67,7 @@ class LandmarkRepository {
         awaitClose { subscription.remove() }
     }
 
-    /**
-     * Get owned landmark IDs mapped to their collection timestamp.
-     */
+    // Watcher
     fun getOwnedLandmarkData(): Flow<Map<String, Long>> = callbackFlow {
         val uid = userId ?: run {
             trySend(emptyMap())
@@ -83,7 +76,7 @@ class LandmarkRepository {
         val subscription = firestore.collection("users").document(uid)
             .collection("collection")
             .addSnapshotListener { snapshot, _ ->
-                val data = snapshot?.documents?.associate { 
+                val data = snapshot?.documents?.associate {
                     it.id to (it.getLong("collectedAt") ?: 0L)
                 } ?: emptyMap()
                 trySend(data)

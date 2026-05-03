@@ -32,7 +32,7 @@ fun LandmarkCard(landmark: Landmark, modifier: Modifier = Modifier) {
         else -> Color(0xFFCD7F32) // Bronze/Brown
     }
 
-    val cardBackground = Color(0xFFF5DEB3) // Classic parchment color
+    val cardBackground = Color(0xFFF5DEB3) // Parchment color
 
     Card(
         modifier = modifier
@@ -55,7 +55,6 @@ fun LandmarkCard(landmark: Landmark, modifier: Modifier = Modifier) {
                 .border(4.dp, frameColor, RoundedCornerShape(4.dp))
                 .padding(8.dp)
         ) {
-            // Header: Name and Rarity Symbol
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -86,12 +85,12 @@ fun LandmarkCard(landmark: Landmark, modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Image Box
+            // Image
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(160.dp)
-                    .border(3.dp, Color(0xFF3E2723)) // Dark brown frame
+                    .border(3.dp, Color(0xFF3E2723))
                     .background(Color.Gray)
             ) {
                 if (landmark.imageUrl.isNotEmpty()) {
@@ -110,7 +109,7 @@ fun LandmarkCard(landmark: Landmark, modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Description/Effect Box
+            // Description
             Column(
                 modifier = Modifier
                     .fillMaxSize()
